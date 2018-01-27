@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
 var board = {cells: []}
-generateBoard(6)
-setBombs(6,6)
+generateBoard(3)
+setBombs(1,3)
 
 // This function generates a board with boardSize x boardSize
 // cells
@@ -45,6 +45,7 @@ function startGame () {
   for (var i = 0; i < board.cells.length; i++) {
     board.cells[i].surroundingMines = countSurroundingMines(board.cells[i])
   }
+
   document.addEventListener('click', checkForWin)
   document.addEventListener('contextmenu', checkForWin)
   
@@ -70,6 +71,8 @@ function checkForWin () {
   }
   //if all cells pass both checks the player has won the game
   lib.displayMessage('You win!')
+  //Show the play again button
+  document.getElementById("reset").classList.toggle("invisble")
 }
 
 // Define this function to count the number of mines around the cell
