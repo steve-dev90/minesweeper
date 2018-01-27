@@ -1,16 +1,43 @@
 document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
-var board = {
-  cells: [{row: 0,col: 0, isMine: false, hidden: true},
-    {row: 0, col: 1, isMine: false, hidden: true},
-    {row: 0, col: 2, isMine: false, hidden: true},
-    {row: 1, col: 0, isMine: true, hidden: true},
-    {row: 1, col: 1, isMine: true, hidden: true},
-    {row: 1, col: 2, isMine: false, hidden: true},
-    {row: 2, col: 0, isMine: false, hidden: true},
-    {row: 2, col: 1, isMine: false, hidden: true},
-    {row: 2, col: 2, isMine: false, hidden: true}]
+var board = {cells: []}
+generateBoard(6)
+setBombs(6,6)
+
+// This function generates a board with boardSize x boardSize
+// cells
+function generateBoard(boardSize) {
+  for (var i = 0; i < boardSize; i++) {
+    for (var j = 0; j < boardSize; j++) {
+      //Add a cell
+      board.cells.push({
+        row: i,
+        col: j,
+        isMine: false,
+        hidden: true
+      })
+    }  
+  }
+}
+
+//This function sets the bombs
+function setBombs(numberOfBombs, boardSize) {
+  for (var i = 0; i < numberOfBombs; i++) {
+    setRandomBomb(boardSize)
+  }
+}
+
+//This function randomly determines where to place the bombs
+function setRandomBomb (boardSize) {
+  var randomCellNumber = 0
+  do {
+    //Get a random cell number over range 0 to boardsize squared -1
+    randomCellNumber = Math.floor(Math.random()*boardSize*boardSize)
+  // Check if their is a bomb at cells[randomCellNumber]. If there is try again
+  } while (board.cells[randomCellNumber].isMine)
+  // Set the bomb!!
+  board.cells[randomCellNumber].isMine = true
 }
 
 function startGame () {
