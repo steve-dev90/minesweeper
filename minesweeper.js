@@ -2,12 +2,14 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
 var board = {cells: []}
-generateBoard(3)
-setBombs(1,3)
+var boardSize = 3
+var numberOfBombs = 1
+generateBoard()
+setBombs()
 
 // This function generates a board with boardSize x boardSize
 // cells
-function generateBoard(boardSize) {
+function generateBoard() {
   for (var i = 0; i < boardSize; i++) {
     for (var j = 0; j < boardSize; j++) {
       //Add a cell
@@ -22,14 +24,14 @@ function generateBoard(boardSize) {
 }
 
 //This function sets the bombs
-function setBombs(numberOfBombs, boardSize) {
+function setBombs() {
   for (var i = 0; i < numberOfBombs; i++) {
-    setRandomBomb(boardSize)
+    setRandomBomb()
   }
 }
 
 //This function randomly determines where to place the bombs
-function setRandomBomb (boardSize) {
+function setRandomBomb () {
   var randomCellNumber = 0
   do {
     //Get a random cell number over range 0 to boardsize squared -1
@@ -41,11 +43,12 @@ function setRandomBomb (boardSize) {
 }
 
 function startGame () {
-  //Count surrounding mines for each cell
+  
+  //Count surrounding mines for each cell  
   for (var i = 0; i < board.cells.length; i++) {
     board.cells[i].surroundingMines = countSurroundingMines(board.cells[i])
-  }
-
+  }  
+  //Check for a win
   document.addEventListener('click', checkForWin)
   document.addEventListener('contextmenu', checkForWin)
   
@@ -72,7 +75,66 @@ function checkForWin () {
   //if all cells pass both checks the player has won the game
   lib.displayMessage('You win!')
   //Show the play again button
+
+  togglePlayAgainButton()
+}
+
+function togglePlayAgainButton() {
   document.getElementById("reset").classList.toggle("invisble")
+}
+
+//This function resets the board
+function resetBoard() {
+
+  //Hide play again button
+  togglePlayAgainButton()
+  //Show Let'splay message
+  lib.displayMessage("Let's play!")
+  //Reset board
+  resetCells()
+  redrawBoard()
+  //Add listensers back in
+  var boardNode = document.getElementsByClassName('board')[0]
+  lib.addListeners(boardNode)
+
+}
+
+function resetCells() {
+  //Reset all board properties. All cells have no mines, are hidden,
+  //are not maked and are unprocessed.   
+  for (var i = 0; i < boardSize*boardSize; i++) {
+    board.cells[i].isMine = false
+    board.cells[i].hidden = true
+    board.cells[i].isMarked = false 
+    board.cells[i].isProcessed = false  
+  }  
+
+  //Reset the bombs
+  setBombs()
+
+  //Re-count sourrounding mines
+  for (var i = 0; i < board.cells.length; i++) {
+    board.cells[i].surroundingMines = countSurroundingMines(board.cells[i])
+  } 
+}
+
+function redrawBoard() {
+  
+  var cellDivs = document.getElementsByClassName("board")[0].children
+
+  //Redraw board. All cells are hidden, are unmarked, and have no
+  //sorrounding mine count showing
+  for (var i = 0; i < cellDivs.length; i++) {
+    cellDivs[i].classList.add('hidden')
+    cellDivs[i].classList.remove('marked')
+    //cellDivs[i].classList.remove('mine')
+    cellDivs[i].innerHTML = "" 
+    //Add mine class if the cell has a mine
+    if (board.cells[i].isMine) {
+      cellDivs[i].classList.add('mine')
+    } else cellDivs[i].classList.remove('mine') 
+  }
+  
 }
 
 // Define this function to count the number of mines around the cell
@@ -84,6 +146,7 @@ function checkForWin () {
 // It will return cell objects in an array. You should loop through 
 // them, counting the number of times `cell.isMine` is true.
 function countSurroundingMines (cell) {
+  
   //Get surrounding cells
   var surrounding = lib.getSurroundingCells(cell.row, cell.col)
   var mineCount = 0
