@@ -76,6 +76,9 @@ function checkForWin () {
   lib.displayMessage('You win!')
   //Show the play again button
 
+  audioClap = document.getElementById("winnoise")
+  audioClap.play()
+
   togglePlayAgainButton()
 }
 

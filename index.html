@@ -6,8 +6,17 @@
     <script src="lib/tests.js"></script>
     <script src="lib/lib.js"></script>
     <script src="minesweeper.js"></script>
+    <audio id = "boomnoise">
+        <source src="./audio/explode.mp3"></source>
+        <source src="./audio/explode.ogg"></source>        
+    </audio>
+    <audio id = "winnoise">
+        <source src="./audio/clapping.mp3"></source>
+        <source src="./audio/clapping.ogg"></source>        
+    </audio>
   </head>
   <body>
+
     <div id="message"></div>
     <div id="reset" class = "invisble">
       <button onclick="resetBoard()" class="button">Play Again?</button>
