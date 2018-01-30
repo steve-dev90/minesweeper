@@ -10,6 +10,12 @@ body {
   flex-direction: column;
 }
 
+.title { 
+  text-align: center;
+  font-size: 1.8rem;
+  margin-bottom: 0;
+}
+
 #message, #notes {
   display: flex;
   flex-direction: column;
@@ -20,8 +26,12 @@ body {
   display: none
 }
 
-#message {
+#message, #score {
   font-size: 1.5rem;
+}
+
+#score {
+  margin-top: 1.0rem;
 }
 
 .button {

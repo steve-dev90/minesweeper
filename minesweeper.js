@@ -2,8 +2,8 @@ document.addEventListener('DOMContentLoaded', startGame)
 
 // Define your `board` object here!
 var board = {cells: []}
-var boardSize = 3
-var numberOfBombs = 1
+var boardSize = 6
+var numberOfBombs = 5
 generateBoard()
 setBombs()
 
@@ -48,12 +48,32 @@ function startGame () {
   for (var i = 0; i < board.cells.length; i++) {
     board.cells[i].surroundingMines = countSurroundingMines(board.cells[i])
   }  
+
+  //Display initial number of mines
+  displayMineCount(numberOfBombs)
+
   //Check for a win
   document.addEventListener('click', checkForWin)
   document.addEventListener('contextmenu', checkForWin)
+
+  //Check to see if a mine has been found
+  document.addEventListener('contextmenu',updateMineCount)
   
   // Don't remove this function call: it makes the game work!
   lib.initBoard()
+}
+
+function updateMineCount() {
+  var mineCount = 0
+  for (var i = 0; i < board.cells.length; i++) {
+    if (board.cells[i].isMine && !board.cells[i].isMarked) mineCount++
+  }
+  displayMineCount(mineCount)
+}
+
+function displayMineCount(mines) {
+  var counter = document.getElementById("score")
+  counter.innerHTML = "Number of unmarked mines " + mines
 }
 
 // Define this function to look for a win condition:
